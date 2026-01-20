@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Library.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Library</a> &gt; <a href="index.source.html" class="el_package">library</a> &gt; <span class="el_source">Library.java</span></div><h1>Library.java</h1><pre class="source lang-java linenums">package library;
+
+import java.util.*;
+
+<span class="fc" id="L5">public class Library {</span>
+<span class="fc" id="L6">    private static List&lt;Book&gt; books = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L7">    private static Map&lt;String, Borrower&gt; loans = new HashMap&lt;&gt;();</span>
+
+    // ═══════════════════════════════════════════════════════════
+    // MÉTHODES D'ACCÈS AUX COLLECTIONS (Getters)
+    // ═══════════════════════════════════════════════════════════
+    
+    public static List&lt;Book&gt; getBooks() {
+<span class="fc" id="L14">        return new ArrayList&lt;&gt;(books); // Copie défensive pour protéger la liste</span>
+    }
+    
+    public static Map&lt;String, Borrower&gt; getLoans() {
+<span class="fc" id="L18">        return new HashMap&lt;&gt;(loans); // Copie défensive</span>
+    }
+    
+    // ═══════════════════════════════════════════════════════════
+    // MÉTHODES MÉTIER - GESTION DES LIVRES
+    // ═══════════════════════════════════════════════════════════
+    
+    /**
+     * Ajoute un livre à la bibliothèque.
+     * Note : Pour compatibilité avec les tests existants, 
+     * cette version N'empêche PAS les doublons (comportement actuel).
+     */
+    public static void addBook(Book book) {
+<span class="fc bfc" id="L31" title="All 2 branches covered.">        if (book == null) {</span>
+<span class="fc" id="L32">            throw new IllegalArgumentException(&quot;Le livre ne peut pas être null&quot;);</span>
+        }
+<span class="fc" id="L34">        books.add(book);</span>
+<span class="fc" id="L35">    }</span>
+    
+    /**
+     * Vérifie si un livre avec cet ISBN existe déjà.
+     */
+    public static boolean hasBookWithIsbn(String isbn) {
+<span class="fc bfc" id="L41" title="All 2 branches covered.">        return byIsbn(isbn) != null;</span>
+    }
+    
+    /**
+     * Vérifie si un livre avec ce titre existe déjà.
+     */
+    public static boolean hasBookWithTitle(String title) {
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        if (title == null) return false;</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        for (Book b : books) {</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">            if (b.getTitle().equalsIgnoreCase(title)) {</span>
+<span class="fc" id="L51">                return true;</span>
+            }
+<span class="fc" id="L53">        }</span>
+<span class="fc" id="L54">        return false;</span>
+    }
+    
+    /**
+     * Supprime tous les livres de la bibliothèque.
+     */
+    public static void clearBooks() {
+<span class="fc" id="L61">        books.clear();</span>
+<span class="fc" id="L62">    }</span>
+    
+    // ═══════════════════════════════════════════════════════════
+    // MÉTHODES MÉTIER - RECHERCHE
+    // ═══════════════════════════════════════════════════════════
+    
+    /**
+     * Recherche un livre par ISBN.
+     * Retourne le premier livre trouvé, ou null si aucun.
+     */
+    public static Book byIsbn(String isbn) {
+<span class="fc bfc" id="L73" title="All 2 branches covered.">        for (Book b : books) {</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">            if (b.getIsbn().equals(isbn)) {</span>
+<span class="fc" id="L75">                return b;</span>
+            }
+<span class="fc" id="L77">        }</span>
+<span class="fc" id="L78">        return null;</span>
+    }
+    
+    /**
+     * Recherche tous les livres d'un auteur (recherche partielle, insensible à la casse).
+     */
+    public static List&lt;Book&gt; findByAuthor(String author) {
+<span class="fc" id="L85">        List&lt;Book&gt; results = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L86" title="All 4 branches covered.">        if (author == null || author.isEmpty()) {</span>
+<span class="fc" id="L87">            return results;</span>
+        }
+        
+<span class="fc" id="L90">        String searchLower = author.toLowerCase(Locale.ROOT);</span>
+<span class="fc bfc" id="L91" title="All 2 branches covered.">        for (Book b : books) {</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">            if (b.getAuthor().toLowerCase(Locale.ROOT).contains(searchLower)) {</span>
+<span class="fc" id="L93">                results.add(b);</span>
+            }
+<span class="fc" id="L95">        }</span>
+<span class="fc" id="L96">        return results;</span>
+    }
+    
+    // ═══════════════════════════════════════════════════════════
+    // MÉTHODES MÉTIER - EMPRUNTS
+    // ═══════════════════════════════════════════════════════════
+    
+    /**
+     * Vérifie si un livre est emprunté.
+     */
+    public static boolean isBorrowed(String isbn) {
+<span class="fc" id="L107">        return loans.containsKey(isbn);</span>
+    }
+    
+    /**
+     * Emprunte un livre.
+     * Retourne true si l'emprunt est réussi, false sinon.
+     */
+    public static boolean borrowBook(String isbn, String borrowerName) {
+        // Validation : livre existe ?
+<span class="fc" id="L116">        Book book = byIsbn(isbn);</span>
+<span class="fc bfc" id="L117" title="All 2 branches covered.">        if (book == null) {</span>
+<span class="fc" id="L118">            return false; // Livre non trouvé</span>
+        }
+        
+        // Validation : déjà emprunté ?
+<span class="fc bfc" id="L122" title="All 2 branches covered.">        if (isBorrowed(isbn)) {</span>
+<span class="fc" id="L123">            return false; // Déjà emprunté</span>
+        }
+        
+        // Emprunt
+<span class="fc" id="L127">        Borrower borrower = new Borrower(borrowerName);</span>
+<span class="fc" id="L128">        loans.put(isbn, borrower);</span>
+<span class="fc" id="L129">        return true;</span>
+    }
+    
+    /**
+     * Retourne un livre.
+     * Retourne le nom de l'emprunteur si le retour est réussi, null sinon.
+     */
+    public static String returnBook(String isbn) {
+<span class="fc" id="L137">        Borrower borrower = loans.remove(isbn);</span>
+<span class="fc bfc" id="L138" title="All 2 branches covered.">        return (borrower != null) ? borrower.getName() : null;</span>
+    }
+    
+    /**
+     * Récupère l'emprunteur d'un livre.
+     */
+    public static Borrower getBorrower(String isbn) {
+<span class="fc" id="L145">        return loans.get(isbn);</span>
+    }
+    
+    /**
+     * Supprime tous les emprunts.
+     */
+    public static void clearLoans() {
+<span class="fc" id="L152">        loans.clear();</span>
+<span class="fc" id="L153">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
