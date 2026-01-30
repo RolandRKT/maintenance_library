@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="legacy.LibraryTest" time="0.069" tests="35" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="legacy.LibraryAppTest" time="0.029" tests="18" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="21"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -53,39 +53,22 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="65.0"/>
   </properties>
-  <testcase name="testIsBorrowed_NullIsbn_ReturnsFalse" classname="legacy.LibraryTest" time="0.019"/>
-  <testcase name="testFindByAuthor_SpecialCharacters_ExactMatch" classname="legacy.LibraryTest" time="0.003"/>
-  <testcase name="testReturnBook_BorrowedBook_Success" classname="legacy.LibraryTest" time="0.004"/>
-  <testcase name="testHasBookWithTitle_NonExistingTitle_ReturnsFalse" classname="legacy.LibraryTest" time="0.001"/>
-  <testcase name="testFindByAuthor_PartialMatch_Works" classname="legacy.LibraryTest" time="0.0"/>
-  <testcase name="testBorrowBook_EmptyBorrowerName_Allowed" classname="legacy.LibraryTest" time="0.0"/>
-  <testcase name="testFindByIsbn_EmptyLibrary_ReturnsNull" classname="legacy.LibraryTest" time="0.001"/>
-  <testcase name="testBorrowBook_AlreadyBorrowed_ReturnsFalse" classname="legacy.LibraryTest" time="0.001"/>
-  <testcase name="testFindByAuthor_CaseSensitive_Behavior" classname="legacy.LibraryTest" time="0.0"/>
-  <testcase name="testFindByIsbn_DuplicateIsbn_ReturnsFirstMatch" classname="legacy.LibraryTest" time="0.0"/>
-  <testcase name="testHasBookWithIsbn_NonExistingIsbn_ReturnsFalse" classname="legacy.LibraryTest" time="0.001"/>
-  <testcase name="testAddBook_DuplicateIsbn_AllowsDuplicate" classname="legacy.LibraryTest" time="0.001"/>
-  <testcase name="testBorrowBook_NonExistingBook_ReturnsFalse" classname="legacy.LibraryTest" time="0.0"/>
-  <testcase name="testLibrary_Constructor_CanBeInstantiated" classname="legacy.LibraryTest" time="0.0"/>
-  <testcase name="testBorrowBook_MultipleBorrowers_Success" classname="legacy.LibraryTest" time="0.001"/>
-  <testcase name="testGetLoans_ReturnsDefensiveCopy" classname="legacy.LibraryTest" time="0.001"/>
-  <testcase name="testAddBook_ValidBook_Success" classname="legacy.LibraryTest" time="0.001"/>
-  <testcase name="testHasBookWithTitle_ExistingTitle_ReturnsTrue" classname="legacy.LibraryTest" time="0.0"/>
-  <testcase name="testBorrowBook_EmptyIsbn_Allowed" classname="legacy.LibraryTest" time="0.001"/>
-  <testcase name="testFindByIsbn_EmptyIsbn_CanFindBook" classname="legacy.LibraryTest" time="0.0"/>
-  <testcase name="testFindByIsbn_NonExistingBook_ReturnsNull" classname="legacy.LibraryTest" time="0.0"/>
-  <testcase name="testIsBorrowed_EmptyLoans_ReturnsFalse" classname="legacy.LibraryTest" time="0.001"/>
-  <testcase name="testHasBookWithIsbn_ExistingIsbn_ReturnsTrue" classname="legacy.LibraryTest" time="0.001"/>
-  <testcase name="testAddBook_MultipleBooks_Success" classname="legacy.LibraryTest" time="0.0"/>
-  <testcase name="testBorrowReturnBorrowCycle_Success" classname="legacy.LibraryTest" time="0.0"/>
-  <testcase name="testFindByIsbn_NullIsbn_ReturnsNull" classname="legacy.LibraryTest" time="0.001"/>
-  <testcase name="testFindByAuthor_NullAuthor_ReturnsEmpty" classname="legacy.LibraryTest" time="0.0"/>
-  <testcase name="testAddBook_DuplicateTitle_AllowsDuplicate" classname="legacy.LibraryTest" time="0.0"/>
-  <testcase name="testFindByIsbn_ExistingBook_ReturnsBook" classname="legacy.LibraryTest" time="0.0"/>
-  <testcase name="testAddBook_NullBook_ThrowsException" classname="legacy.LibraryTest" time="0.001"/>
-  <testcase name="testHasBookWithTitle_NullTitle_ReturnsFalse" classname="legacy.LibraryTest" time="0.0"/>
-  <testcase name="testBorrowBook_AvailableBook_Success" classname="legacy.LibraryTest" time="0.001"/>
-  <testcase name="testLibrary_AttributesArePrivate_UseGetters" classname="legacy.LibraryTest" time="0.0"/>
-  <testcase name="testReturnBook_NotBorrowed_ReturnsNull" classname="legacy.LibraryTest" time="0.001"/>
-  <testcase name="testFindByAuthor_EmptyString_ReturnsEmpty" classname="legacy.LibraryTest" time="0.0"/>
+  <testcase name="testLibraryApp_AddBook_OnlyTitleMatch" classname="legacy.LibraryAppTest" time="0.013"/>
+  <testcase name="testLibraryApp_FindByAuthor_WithBorrowedBook" classname="legacy.LibraryAppTest" time="0.001"/>
+  <testcase name="testLibraryApp_Exit" classname="legacy.LibraryAppTest" time="0.001"/>
+  <testcase name="testLibraryApp_BorrowBook_Success" classname="legacy.LibraryAppTest" time="0.001"/>
+  <testcase name="testLibraryApp_AddBook_NoDuplicate" classname="legacy.LibraryAppTest" time="0.001"/>
+  <testcase name="testLibraryApp_FindByAuthor_Found" classname="legacy.LibraryAppTest" time="0.001"/>
+  <testcase name="testLibraryApp_AddBook_InvalidYear" classname="legacy.LibraryAppTest" time="0.001"/>
+  <testcase name="testLibraryApp_AddBook_DuplicateIsbn" classname="legacy.LibraryAppTest" time="0.001"/>
+  <testcase name="testLibraryApp_ListBooks" classname="legacy.LibraryAppTest" time="0.001"/>
+  <testcase name="testLibraryApp_ReturnBook_Success" classname="legacy.LibraryAppTest" time="0.001"/>
+  <testcase name="testLibraryApp_ReturnBook_NotBorrowed" classname="legacy.LibraryAppTest" time="0.0"/>
+  <testcase name="testLibraryApp_Constructor" classname="legacy.LibraryAppTest" time="0.0"/>
+  <testcase name="testLibraryApp_BorrowBook_NotFound" classname="legacy.LibraryAppTest" time="0.001"/>
+  <testcase name="testLibraryApp_BorrowBook_AlreadyBorrowed" classname="legacy.LibraryAppTest" time="0.0"/>
+  <testcase name="testLibraryApp_ListBooks_WithBorrowedStatus" classname="legacy.LibraryAppTest" time="0.0"/>
+  <testcase name="testLibraryApp_InvalidOption" classname="legacy.LibraryAppTest" time="0.001"/>
+  <testcase name="testLibraryApp_AddBook_DuplicateTitle" classname="legacy.LibraryAppTest" time="0.0"/>
+  <testcase name="testLibraryApp_AddBook_Success" classname="legacy.LibraryAppTest" time="0.0"/>
 </testsuite>

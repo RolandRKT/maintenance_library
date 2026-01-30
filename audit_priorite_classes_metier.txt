@@ -1,0 +1,1219 @@
+=== FILE: src/main/java/library/Library.java ===
+package library;
+
+import java.util.*;
+
+public class Library {
+    private static List<Book> books = new ArrayList<>();
+    private static Map<String, Borrower> loans = new HashMap<>();
+
+    // ═══════════════════════════════════════════════════════════
+    // MÉTHODES D'ACCÈS AUX COLLECTIONS (Getters)
+    // ═══════════════════════════════════════════════════════════
+    
+    public static List<Book> getBooks() {
+        return new ArrayList<>(books); // Copie défensive pour protéger la liste
+    }
+    
+    public static Map<String, Borrower> getLoans() {
+        return new HashMap<>(loans); // Copie défensive
+    }
+    
+    // ═══════════════════════════════════════════════════════════
+    // MÉTHODES MÉTIER - GESTION DES LIVRES
+    // ═══════════════════════════════════════════════════════════
+    
+    /**
+     * Ajoute un livre à la bibliothèque.
+     * Note : Pour compatibilité avec les tests existants, 
+     * cette version N'empêche PAS les doublons (comportement actuel).
+     */
+    public static void addBook(Book book) {
+        if (book == null) {
+            throw new IllegalArgumentException("Le livre ne peut pas être null");
+        }
+        books.add(book);
+    }
+    
+    /**
+     * Vérifie si un livre avec cet ISBN existe déjà.
+     */
+    public static boolean hasBookWithIsbn(String isbn) {
+        return byIsbn(isbn) != null;
+    }
+    
+    /**
+     * Vérifie si un livre avec ce titre existe déjà.
+     */
+    public static boolean hasBookWithTitle(String title) {
+        if (title == null) return false;
+        for (Book b : books) {
+            if (b.getTitle().equalsIgnoreCase(title)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Supprime tous les livres de la bibliothèque.
+     */
+    public static void clearBooks() {
+        books.clear();
+    }
+    
+    // ═══════════════════════════════════════════════════════════
+    // MÉTHODES MÉTIER - RECHERCHE
+    // ═══════════════════════════════════════════════════════════
+    
+    /**
+     * Recherche un livre par ISBN.
+     * Retourne le premier livre trouvé, ou null si aucun.
+     */
+    public static Book byIsbn(String isbn) {
+        for (Book b : books) {
+            if (b.getIsbn().equals(isbn)) {
+                return b;
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * Recherche tous les livres d'un auteur (recherche partielle, insensible à la casse).
+     */
+    public static List<Book> findByAuthor(String author) {
+        List<Book> results = new ArrayList<>();
+        if (author == null || author.isEmpty()) {
+            return results;
+        }
+        
+        String searchLower = author.toLowerCase(Locale.ROOT);
+        for (Book b : books) {
+            if (b.getAuthor().toLowerCase(Locale.ROOT).contains(searchLower)) {
+                results.add(b);
+            }
+        }
+        return results;
+    }
+    
+    // ═══════════════════════════════════════════════════════════
+    // MÉTHODES MÉTIER - EMPRUNTS
+    // ═══════════════════════════════════════════════════════════
+    
+    /**
+     * Vérifie si un livre est emprunté.
+     */
+    public static boolean isBorrowed(String isbn) {
+        return loans.containsKey(isbn);
+    }
+    
+    /**
+     * Emprunte un livre.
+     * Retourne true si l'emprunt est réussi, false sinon.
+     */
+    public static boolean borrowBook(String isbn, String borrowerName) {
+        // Validation : livre existe ?
+        Book book = byIsbn(isbn);
+        if (book == null) {
+            return false; // Livre non trouvé
+        }
+        
+        // Validation : déjà emprunté ?
+        if (isBorrowed(isbn)) {
+            return false; // Déjà emprunté
+        }
+        
+        // Emprunt
+        Borrower borrower = new Borrower(borrowerName);
+        loans.put(isbn, borrower);
+        return true;
+    }
+    
+    /**
+     * Retourne un livre.
+     * Retourne le nom de l'emprunteur si le retour est réussi, null sinon.
+     */
+    public static String returnBook(String isbn) {
+        Borrower borrower = loans.remove(isbn);
+        return (borrower != null) ? borrower.getName() : null;
+    }
+    
+    /**
+     * Récupère l'emprunteur d'un livre.
+     */
+    public static Borrower getBorrower(String isbn) {
+        return loans.get(isbn);
+    }
+    
+    /**
+     * Supprime tous les emprunts.
+     */
+    public static void clearLoans() {
+        loans.clear();
+    }
+}
+
+
+
+=== FILE: src/main/java/library/Book.java ===
+
+package library;
+
+public class Book {
+    private String isbn;
+    private String title;
+    private String author;
+    private int year;
+
+    public Book(String isbn, String title, String author, int year) {
+        this.isbn = isbn;
+        this.title = title;
+        this.author = author;
+        this.year = year;
+    }
+
+    public String getIsbn() { return isbn; }
+    public String getTitle() { return title; }
+    public String getAuthor() { return author; }
+    public int getYear() { return year; }
+
+    @Override
+    public String toString() {
+        return "[" + isbn + "] " + title + " - " + author + " (" + year + ")";
+    }
+}
+
+
+
+=== FILE: src/main/java/library/Borrower.java ===
+package library;
+
+public class Borrower {
+    private String name;
+    
+    public Borrower(String name) {
+        this.name = name;
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
+}
+
+
+
+=== FILE: src/main/java/library/LibraryApp.java ===
+package library;
+
+import java.util.*;
+
+/**
+ * Console app for a tiny library.
+ * 
+ */
+public class LibraryApp {
+
+    public static void main(String[] args) {
+        System.out.println("Welcome to Library v1.0");
+        Scanner sc = new Scanner(System.in);
+        while (true) {
+            System.out.println("\n1) Add book  2) List books  3) Borrow  4) Return  5) Find by author  6) Exit");
+            System.out.print("> ");
+            String choice = sc.nextLine();
+            if ("1".equals(choice)) {
+
+                System.out.print("ISBN? ");
+                String isbn = sc.nextLine();
+                System.out.print("Title? ");
+                String title = sc.nextLine();
+                System.out.print("Author? ");
+                String author = sc.nextLine();
+                System.out.print("Year? ");
+                String yearStr = sc.nextLine();
+                int year = 0;
+                try {
+                    year = Integer.parseInt(yearStr);
+                } catch (Exception ex) {
+                    System.out.println("Invalid year, defaulting to 0");
+                }
+
+                for (Book b : Library.getBooks()) {
+                    if (b.getIsbn().equals(isbn) || b.getTitle().equalsIgnoreCase(title)) {
+                        System.out.println("Warning: similar book already exists.");
+                    }
+                }
+                Book b = new Book(isbn, title, author, year);
+                Library.addBook(b);
+                System.out.println("Added: " + b);
+            } else if ("2".equals(choice)) {
+
+                for (Book b : Library.getBooks()) {
+                    System.out.println(b + (Library.isBorrowed(b.getIsbn()) ? " [BORROWED]" : ""));
+                }
+            } else if ("3".equals(choice)) {
+                System.out.print("Borrower name? ");
+                String n = sc.nextLine();
+                System.out.print("ISBN to borrow? ");
+                String ib = sc.nextLine();
+
+                Book found = Library.byIsbn(ib);
+                
+                if (found == null) {
+                    System.out.println("Not found.");
+                } else if (Library.isBorrowed(ib)) {
+                    System.out.println("Already borrowed.");
+                } else {
+                    Library.borrowBook(ib, n);
+                    System.out.println("OK.");
+                }
+            } else if ("4".equals(choice)) {
+                System.out.print("ISBN to return? ");
+                String ib = sc.nextLine();
+                if (Library.returnBook(ib) != null) {
+                    System.out.println("Returned.");
+                } else {
+                    System.out.println("Not borrowed.");
+                }
+            } else if ("5".equals(choice)) {
+                System.out.print("Author contains? ");
+                String a = sc.nextLine();
+
+                List<Book> results = Library.findByAuthor(a);
+                for (Book b : results) {
+                    System.out.println(b + (Library.isBorrowed(b.getIsbn()) ? " [BORROWED]" : ""));
+                }
+            } else if ("6".equals(choice)) {
+                break;
+            } else {
+                System.out.println("Unknown option.");
+            }
+        }
+
+        System.out.println("Bye.");
+    }
+}
+
+
+
+=== FILE: src/test/java/legacy/LibraryTest.java ===
+package legacy;
+
+import library.Book;
+import library.Borrower;
+import library.Library;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.List;
+import java.util.Map;
+
+@DisplayName("Tests de non-régression - Library")
+class LibraryTest {
+
+    @BeforeEach
+    void setUp() {
+        // Nettoie l'état avant chaque test (isolation des tests)
+        Library.clearBooks();
+        Library.clearLoans();
+    }
+
+    @AfterEach
+    void tearDown() {
+        // Nettoie l'état après chaque test
+        Library.clearBooks();
+        Library.clearLoans();
+    }
+
+    // Test de construction
+
+    @Test
+    @DisplayName("Constructeur de Library - Couverture complète")
+    void testLibrary_Constructor_CanBeInstantiated() {
+        // Act
+        Library library = new Library();
+
+        // Assert
+        assertNotNull(library, "Une instance de Library peut être créée");
+        // Note : En pratique, Library ne devrait jamais être instanciée car tout est
+        // static
+        // Ce test existe uniquement pour la couverture à 100%
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // TESTS D'AJOUT DE LIVRES
+    // ═══════════════════════════════════════════════════════════════════════════
+
+    @Test
+    @DisplayName("Ajout d'un livre valide - Cas nominal")
+    void testAddBook_ValidBook_Success() {
+        // Arrange
+        Book book = new Book("978-BIBLE-001", "Bible", "Lenny", 2025);
+
+        // Act
+        Library.addBook(book);
+
+        // Assert
+        assertEquals(1, Library.getBooks().size(), "La bibliothèque devrait contenir 1 livre");
+        assertEquals(book, Library.getBooks().get(0), "Le livre ajouté devrait être dans la liste");
+    }
+
+    @Test
+    @DisplayName("Ajout de plusieurs livres - Cas nominal")
+    void testAddBook_MultipleBooks_Success() {
+        // Arrange
+        Book book1 = new Book("978-LENNY-001", "Le livre de Lenny", "Lenny", 2026);
+        Book book2 = new Book("978-ROLAND-001", "Comment devenir comme Roland", "Roland", 2025);
+        Book book3 = new Book("978-SINGES-001", "Les singes", "Le R", 2024);
+
+        // Act
+        Library.addBook(book1);
+        Library.addBook(book2);
+        Library.addBook(book3);
+
+        // Assert
+        assertEquals(3, Library.getBooks().size(), "La bibliothèque devrait contenir 3 livres");
+        assertTrue(Library.getBooks().contains(book1));
+        assertTrue(Library.getBooks().contains(book2));
+        assertTrue(Library.getBooks().contains(book3));
+    }
+
+    @Test
+    @DisplayName("Ajout d'un livre avec ISBN dupliqué - Point critique identifié")
+    void testAddBook_DuplicateIsbn_AllowsDuplicate() {
+        // Arrange
+        Book book1 = new Book("978-LENNY-999", "Le livre de Lenny", "Lenny", 2026);
+        Book book2 = new Book("978-LENNY-999", "Comment devenir comme Lenny", "Moi", 2025);
+
+        // Act
+        Library.addBook(book1);
+        Library.addBook(book2);
+
+        // Assert - Test de non-régression : le système PERMET actuellement les doublons
+        assertEquals(2, Library.getBooks().size(), "Le système permet l'ajout de doublons ISBN (comportement actuel)");
+    }
+
+    @Test
+    @DisplayName("Ajout d'un livre avec titre dupliqué - Point critique")
+    void testAddBook_DuplicateTitle_AllowsDuplicate() {
+        // Arrange
+        Book book1 = new Book("978-ROLAND-001", "Comment devenir comme Roland", "Roland", 2026);
+        Book book2 = new Book("978-ROLAND-002", "Comment devenir comme Roland", "Le R", 2025);
+
+        // Act
+        Library.addBook(book1);
+        Library.addBook(book2);
+
+        // Assert
+        assertEquals(2, Library.getBooks().size(), "Le système permet l'ajout de titres dupliqués");
+    }
+
+    @Test
+    @DisplayName("Attributs books et loans sont maintenant privés - Dette technique résolue")
+    void testLibrary_AttributesArePrivate_UseGetters() {
+        // Arrange
+        Book book = new Book("978-TEST-001", "Bible", "Lenny", 2026);
+
+        // Act - Utilisation des méthodes publiques
+        Library.addBook(book);
+        Library.clearBooks();
+
+        // Assert
+        assertEquals(0, Library.getBooks().size(), "clearBooks() permet de vider la bibliothèque proprement");
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // TESTS D'EMPRUNT
+    // ═══════════════════════════════════════════════════════════════════════════
+
+    @Test
+    @DisplayName("Emprunt d'un livre disponible - Cas nominal")
+    void testBorrowBook_AvailableBook_Success() {
+        // Arrange
+        Book book = new Book("978-BIBLE-001", "Bible", "Lenny", 2025);
+        Library.addBook(book);
+
+        // Act
+        boolean result = Library.borrowBook(book.getIsbn(), "Roland");
+
+        // Assert
+        assertTrue(result, "L'emprunt devrait réussir");
+        assertTrue(Library.isBorrowed(book.getIsbn()), "Le livre devrait être emprunté");
+        assertEquals("Roland", Library.getBorrower(book.getIsbn()).getName());
+    }
+
+    @Test
+    @DisplayName("Emprunt d'un livre déjà emprunté - Détection")
+    void testBorrowBook_AlreadyBorrowed_ReturnsFalse() {
+        // Arrange
+        Book book = new Book("978-LENNY-001", "Le livre de Lenny", "Lenny", 2026);
+        Library.addBook(book);
+        Library.borrowBook(book.getIsbn(), "Roland");
+
+        // Act
+        boolean result = Library.borrowBook(book.getIsbn(), "Le R");
+
+        // Assert
+        assertFalse(result, "L'emprunt devrait échouer car déjà emprunté");
+        assertTrue(Library.isBorrowed(book.getIsbn()));
+        assertEquals("Roland", Library.getBorrower(book.getIsbn()).getName(),
+                "L'emprunteur devrait toujours être Roland");
+    }
+
+    @Test
+    @DisplayName("Emprunt d'un livre inexistant - Validation")
+    void testBorrowBook_NonExistingBook_ReturnsFalse() {
+        // Act
+        boolean result = Library.borrowBook("978-INEXISTANT-999", "Moi");
+
+        // Assert
+        assertFalse(result, "L'emprunt devrait échouer car le livre n'existe pas");
+        assertFalse(Library.isBorrowed("978-INEXISTANT-999"));
+    }
+
+    @Test
+    @DisplayName("Emprunt avec ISBN vide - Point critique")
+    void testBorrowBook_EmptyIsbn_Allowed() {
+        // Arrange
+        Book book = new Book("", "Les singes", "Le R", 2024);
+        Library.addBook(book);
+
+        // Act
+        boolean result = Library.borrowBook("", "Lenny");
+
+        // Assert
+        assertTrue(result, "Le système permet l'emprunt avec ISBN vide");
+        assertEquals("Lenny", Library.getBorrower("").getName());
+    }
+
+    @Test
+    @DisplayName("Emprunt avec nom d'emprunteur vide - Point critique")
+    void testBorrowBook_EmptyBorrowerName_Allowed() {
+        // Arrange
+        Book book = new Book("978-SINGES-001", "Les singes", "Le R", 2024);
+        Library.addBook(book);
+
+        // Act
+        boolean result = Library.borrowBook(book.getIsbn(), "");
+
+        // Assert
+        assertTrue(result);
+        assertEquals("", Library.getBorrower(book.getIsbn()).getName());
+    }
+
+    @Test
+    @DisplayName("Retour d'un livre emprunté - Cas nominal")
+    void testReturnBook_BorrowedBook_Success() {
+        // Arrange
+        Book book = new Book("978-ROLAND-001", "Comment devenir comme Roland", "Roland", 2026);
+        Library.addBook(book);
+        Library.borrowBook(book.getIsbn(), "Lenny");
+
+        // Act
+        String borrowerName = Library.returnBook(book.getIsbn());
+
+        // Assert
+        assertNotNull(borrowerName, "Le retour devrait retourner le nom de l'emprunteur");
+        assertEquals("Lenny", borrowerName);
+        assertFalse(Library.isBorrowed(book.getIsbn()), "Le livre ne devrait plus être emprunté");
+    }
+
+    @Test
+    @DisplayName("Retour d'un livre non emprunté - Cas d'erreur")
+    void testReturnBook_NotBorrowed_ReturnsNull() {
+        // Arrange
+        Book book = new Book("978-BIBLE-001", "Bible", "Lenny", 2025);
+        Library.addBook(book);
+
+        // Act
+        String borrowerName = Library.returnBook(book.getIsbn());
+
+        // Assert
+        assertNull(borrowerName, "Aucun emprunteur ne devrait être retourné");
+        assertFalse(Library.isBorrowed(book.getIsbn()));
+    }
+
+    @Test
+    @DisplayName("Plusieurs emprunteurs avec différents livres - Cas complexe")
+    void testBorrowBook_MultipleBorrowers_Success() {
+        // Arrange
+        Book book1 = new Book("978-BIBLE-001", "Bible", "Lenny", 2025);
+        Book book2 = new Book("978-LENNY-001", "Le livre de Lenny", "Lenny", 2026);
+        Book book3 = new Book("978-ROLAND-001", "Comment devenir comme Roland", "Roland", 2026);
+        Library.addBook(book1);
+        Library.addBook(book2);
+        Library.addBook(book3);
+
+        // Act
+        Library.borrowBook(book1.getIsbn(), "Roland");
+        Library.borrowBook(book2.getIsbn(), "Le R");
+        Library.borrowBook(book3.getIsbn(), "Moi");
+
+        // Assert
+        assertTrue(Library.isBorrowed(book1.getIsbn()));
+        assertTrue(Library.isBorrowed(book2.getIsbn()));
+        assertTrue(Library.isBorrowed(book3.getIsbn()));
+        assertEquals("Roland", Library.getBorrower(book1.getIsbn()).getName());
+        assertEquals("Le R", Library.getBorrower(book2.getIsbn()).getName());
+        assertEquals("Moi", Library.getBorrower(book3.getIsbn()).getName());
+    }
+
+    @Test
+    @DisplayName("Cycle complet : emprunt-retour-réemprunt - Scénario réel")
+    void testBorrowReturnBorrowCycle_Success() {
+        // Arrange
+        Book book = new Book("978-LENNY-002", "Comment devenir comme Lenny", "Moi", 2025);
+        Library.addBook(book);
+
+        // Act & Assert - Premier emprunt
+        Library.borrowBook(book.getIsbn(), "Roland");
+        assertTrue(Library.isBorrowed(book.getIsbn()));
+        assertEquals("Roland", Library.getBorrower(book.getIsbn()).getName());
+
+        // Retour
+        Library.returnBook(book.getIsbn());
+        assertFalse(Library.isBorrowed(book.getIsbn()));
+
+        // Deuxième emprunt
+        Library.borrowBook(book.getIsbn(), "Lenny");
+        assertTrue(Library.isBorrowed(book.getIsbn()));
+        assertEquals("Lenny", Library.getBorrower(book.getIsbn()).getName());
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // TESTS DE RECHERCHE
+    // ═══════════════════════════════════════════════════════════════════════════
+
+    @Test
+    @DisplayName("Recherche par ISBN existant - Cas nominal")
+    void testFindByIsbn_ExistingBook_ReturnsBook() {
+        // Arrange
+        Book book1 = new Book("978-BIBLE-001", "Bible", "Lenny", 2025);
+        Book book2 = new Book("978-SINGES-001", "Les singes", "Le R", 2024);
+        Library.addBook(book1);
+        Library.addBook(book2);
+
+        // Act
+        Book found = Library.byIsbn("978-SINGES-001");
+
+        // Assert
+        assertNotNull(found, "Le livre devrait être trouvé");
+        assertEquals("978-SINGES-001", found.getIsbn());
+        assertEquals("Les singes", found.getTitle());
+        assertEquals("Le R", found.getAuthor());
+        assertEquals(2024, found.getYear());
+    }
+
+    @Test
+    @DisplayName("Recherche par ISBN inexistant - Cas d'échec")
+    void testFindByIsbn_NonExistingBook_ReturnsNull() {
+        // Arrange
+        Book book = new Book("978-LENNY-001", "Le livre de Lenny", "Lenny", 2026);
+        Library.addBook(book);
+
+        // Act
+        Book found = Library.byIsbn("978-INEXISTANT-999");
+
+        // Assert
+        assertNull(found, "Aucun livre ne devrait être trouvé");
+    }
+
+    @Test
+    @DisplayName("Recherche dans bibliothèque vide - White Box (boucle vide)")
+    void testFindByIsbn_EmptyLibrary_ReturnsNull() {
+        // Act
+        Book found = Library.byIsbn("978-BIBLE-001");
+
+        // Assert
+        assertNull(found, "Aucun livre dans une bibliothèque vide");
+    }
+
+    @Test
+    @DisplayName("Recherche avec ISBN vide - Cas limite")
+    void testFindByIsbn_EmptyIsbn_CanFindBook() {
+        // Arrange
+        Book book = new Book("", "Les singes", "Le R", 2024);
+        Library.addBook(book);
+
+        // Act
+        Book found = Library.byIsbn("");
+
+        // Assert
+        assertNotNull(found, "Le livre avec ISBN vide devrait être trouvé");
+        assertEquals("Les singes", found.getTitle());
+    }
+
+    @Test
+    @DisplayName("Recherche avec ISBN null - Cas limite")
+    void testFindByIsbn_NullIsbn_ReturnsNull() {
+        // Arrange
+        Book book = new Book("978-ROLAND-001", "Comment devenir comme Roland", "Roland", 2026);
+        Library.addBook(book);
+
+        // Act
+        Book found = Library.byIsbn(null);
+
+        // Assert
+        assertNull(found, "null ne devrait matcher aucun ISBN");
+    }
+
+    @Test
+    @DisplayName("Recherche retourne le premier livre en cas de doublons - White Box (break)")
+    void testFindByIsbn_DuplicateIsbn_ReturnsFirstMatch() {
+        // Arrange
+        Book book1 = new Book("978-LENNY-999", "Le livre de Lenny", "Lenny", 2026);
+        Book book2 = new Book("978-LENNY-999", "Comment devenir comme Lenny", "Moi", 2025);
+        Library.addBook(book1);
+        Library.addBook(book2);
+
+        // Act
+        Book found = Library.byIsbn("978-LENNY-999");
+
+        // Assert
+        assertNotNull(found);
+        assertEquals("Le livre de Lenny", found.getTitle(),
+                "byIsbn retourne le premier livre trouvé (break dans la boucle)");
+        assertEquals("Lenny", found.getAuthor());
+    }
+
+    @Test
+    @DisplayName("isBorrowed sur bibliothèque vide - White Box")
+    void testIsBorrowed_EmptyLoans_ReturnsFalse() {
+        // Arrange
+        Book book = new Book("978-BIBLE-001", "Bible", "Lenny", 2025);
+        Library.addBook(book);
+
+        // Act & Assert
+        assertFalse(Library.isBorrowed(book.getIsbn()), "Un livre non emprunté retourne false");
+    }
+
+    @Test
+    @DisplayName("isBorrowed avec ISBN null - Cas limite")
+    void testIsBorrowed_NullIsbn_ReturnsFalse() {
+        // Act & Assert
+        assertFalse(Library.isBorrowed(null), "null ne correspond à aucun emprunt");
+    }
+
+    @Test
+    @DisplayName("Recherche par auteur sensible à la casse - Point critique")
+    void testFindByAuthor_CaseSensitive_Behavior() {
+        // Arrange
+        Book book1 = new Book("978-ROLAND-001", "Comment devenir comme Roland", "Roland", 2026);
+        Book book2 = new Book("978-ROLAND-002", "Bible", "roland", 2025);
+        Library.addBook(book1);
+        Library.addBook(book2);
+
+        // Act
+        List<Book> results = Library.findByAuthor("roland");
+
+        // Assert
+        assertEquals(2, results.size(), "Recherche insensible à la casse avec toLowerCase()");
+        assertTrue(results.contains(book1));
+        assertTrue(results.contains(book2));
+    }
+
+    @Test
+    @DisplayName("Recherche par auteur avec caractères spéciaux - Point critique")
+    void testFindByAuthor_SpecialCharacters_ExactMatch() {
+        // Arrange
+        Book book1 = new Book("978-LER-001", "Les singes", "Le R", 2024);
+        Book book2 = new Book("978-LER-002", "Bible", "Le-R", 2025);
+        Library.addBook(book1);
+        Library.addBook(book2);
+
+        // Act
+        List<Book> resultsWithSpace = Library.findByAuthor("le r");
+        List<Book> resultsWithHyphen = Library.findByAuthor("le-r");
+
+        // Assert
+        assertEquals(1, resultsWithSpace.size(), "Espace doit correspondre exactement");
+        assertTrue(resultsWithSpace.contains(book1));
+
+        assertEquals(1, resultsWithHyphen.size(), "Trait d'union doit correspondre exactement");
+        assertTrue(resultsWithHyphen.contains(book2));
+    }
+
+    @Test
+    @DisplayName("Recherche partielle par auteur - Cas nominal")
+    void testFindByAuthor_PartialMatch_Works() {
+        // Arrange
+        Book book1 = new Book("978-LENNY-001", "Le livre de Lenny", "Lenny", 2026);
+        Book book2 = new Book("978-ROLAND-001", "Comment devenir comme Roland", "Roland", 2026);
+        Library.addBook(book1);
+        Library.addBook(book2);
+
+        // Act
+        List<Book> results = Library.findByAuthor("len");
+
+        // Assert - Recherche partielle fonctionne
+        assertEquals(1, results.size());
+        assertTrue(results.contains(book1));
+        assertFalse(results.contains(book2));
+    }
+
+    @Test
+    @DisplayName("Recherche par auteur avec chaîne vide - Cas limite")
+    void testFindByAuthor_EmptyString_ReturnsEmpty() {
+        // Arrange
+        Book book = new Book("978-LENNY-001", "Le livre de Lenny", "Lenny", 2026);
+        Library.addBook(book);
+
+        // Act
+        List<Book> results = Library.findByAuthor("");
+
+        // Assert
+        assertEquals(0, results.size(), "Une recherche vide retourne une liste vide");
+    }
+
+    @Test
+    @DisplayName("Recherche par auteur avec null - Cas limite")
+    void testFindByAuthor_NullAuthor_ReturnsEmpty() {
+        // Arrange
+        Book book = new Book("978-ROLAND-001", "Comment devenir comme Roland", "Roland", 2026);
+        Library.addBook(book);
+
+        // Act
+        List<Book> results = Library.findByAuthor(null);
+
+        // Assert
+        assertEquals(0, results.size(), "Une recherche null retourne une liste vide");
+    }
+
+    @Test
+    @DisplayName("Vérification de livre avec titre existant - Nouvelle méthode")
+    void testHasBookWithTitle_ExistingTitle_ReturnsTrue() {
+        // Arrange
+        Book book = new Book("978-BIBLE-001", "Bible", "Lenny", 2025);
+        Library.addBook(book);
+
+        // Act
+        boolean result = Library.hasBookWithTitle("Bible");
+
+        // Assert
+        assertTrue(result, "hasBookWithTitle devrait trouver le livre");
+    }
+
+    @Test
+    @DisplayName("Vérification de livre avec titre inexistant - Nouvelle méthode")
+    void testHasBookWithTitle_NonExistingTitle_ReturnsFalse() {
+        // Arrange
+        Book book = new Book("978-BIBLE-001", "Bible", "Lenny", 2025);
+        Library.addBook(book);
+
+        // Act
+        boolean result = Library.hasBookWithTitle("Inexistant");
+
+        // Assert
+        assertFalse(result, "hasBookWithTitle ne devrait pas trouver de livre");
+    }
+
+    @Test
+    @DisplayName("Vérification de livre avec titre null - Cas limite")
+    void testHasBookWithTitle_NullTitle_ReturnsFalse() {
+        // Arrange
+        Book book = new Book("978-BIBLE-001", "Bible", "Lenny", 2025);
+        Library.addBook(book);
+
+        // Act
+        boolean result = Library.hasBookWithTitle(null);
+
+        // Assert
+        assertFalse(result, "hasBookWithTitle avec null devrait retourner false");
+    }
+
+    @Test
+    @DisplayName("Ajout d'un livre null - Validation")
+    void testAddBook_NullBook_ThrowsException() {
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> {
+            Library.addBook(null);
+        }, "addBook avec null devrait lancer une IllegalArgumentException");
+    }
+
+    @Test
+    @DisplayName("Vérification de livre avec ISBN existant - Nouvelle méthode")
+    void testHasBookWithIsbn_ExistingIsbn_ReturnsTrue() {
+        // Arrange
+        Book book = new Book("978-BIBLE-001", "Bible", "Lenny", 2025);
+        Library.addBook(book);
+
+        // Act
+        boolean result = Library.hasBookWithIsbn("978-BIBLE-001");
+
+        // Assert
+        assertTrue(result, "hasBookWithIsbn devrait trouver le livre");
+    }
+
+    @Test
+    @DisplayName("Vérification de livre avec ISBN inexistant - Nouvelle méthode")
+    void testHasBookWithIsbn_NonExistingIsbn_ReturnsFalse() {
+        // Act
+        boolean result = Library.hasBookWithIsbn("978-INEXISTANT-999");
+
+        // Assert
+        assertFalse(result, "hasBookWithIsbn ne devrait pas trouver de livre");
+    }
+
+    @Test
+    @DisplayName("getLoans retourne une copie défensive - Sécurité")
+    void testGetLoans_ReturnsDefensiveCopy() {
+        // Arrange
+        Book book = new Book("978-BIBLE-001", "Bible", "Lenny", 2025);
+        Library.addBook(book);
+        Library.borrowBook(book.getIsbn(), "Roland");
+
+        // Act
+        Map<String, Borrower> loans1 = Library.getLoans();
+        Map<String, Borrower> loans2 = Library.getLoans();
+
+        // Assert
+        assertEquals(1, loans1.size(), "getLoans devrait retourner les emprunts");
+        assertNotSame(loans1, loans2, "getLoans devrait retourner une nouvelle copie à chaque appel");
+
+        // Modifier la copie ne doit pas affecter l'original
+        loans1.clear();
+        assertEquals(0, loans1.size(), "La copie est vidée");
+        assertEquals(1, Library.getLoans().size(), "L'original n'est pas affecté");
+    }
+
+}
+
+
+
+=== FILE: src/test/java/legacy/BookTest.java ===
+package legacy;
+
+import library.Book;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@DisplayName("Tests de non-régression - Book")
+class BookTest {
+
+    @Test
+    @DisplayName("Création d'un livre valide - Cas nominal")
+    void testBook_ValidBook_Success() {
+        // Arrange & Act
+        Book book = new Book("978-1234567890", "Clean Code", "Robert Martin", 2008);
+        
+        // Assert
+        assertEquals("978-1234567890", book.getIsbn());
+        assertEquals("Clean Code", book.getTitle());
+        assertEquals("Robert Martin", book.getAuthor());
+        assertEquals(2008, book.getYear());
+    }
+
+    @Test
+    @DisplayName("Création d'un livre avec ISBN vide - Point critique")
+    void testBook_EmptyIsbn_Allowed() {
+        // Arrange & Act
+        Book book = new Book("", "Test Book", "Test Author", 2020);
+        
+        // Assert
+        assertEquals("", book.getIsbn(), "Le système permet les ISBN vides");
+    }
+
+    @Test
+    @DisplayName("Création d'un livre avec titre vide - Validation")
+    void testBook_EmptyTitle_Allowed() {
+        // Arrange & Act
+        Book book = new Book("978-1234567890", "", "Test Author", 2020);
+        
+        // Assert
+        assertEquals("", book.getTitle());
+    }
+
+    @Test
+    @DisplayName("Création d'un livre avec auteur vide - Validation")
+    void testBook_EmptyAuthor_Allowed() {
+        // Arrange & Act
+        Book book = new Book("978-1234567890", "Test Book", "", 2020);
+        
+        // Assert
+        assertEquals("", book.getAuthor());
+    }
+
+    @Test
+    @DisplayName("Création d'un livre avec année 0 - Cas limite")
+    void testBook_YearZero_Allowed() {
+        // Arrange & Act
+        Book book = new Book("978-1234567890", "Test Book", "Test Author", 0);
+        
+        // Assert
+        assertEquals(0, book.getYear());
+    }
+
+    @Test
+    @DisplayName("Création d'un livre avec année négative - Cas limite")
+    void testBook_NegativeYear_Allowed() {
+        // Arrange & Act
+        Book book = new Book("978-1234567890", "Ancient Book", "Old Author", -500);
+        
+        // Assert
+        assertEquals(-500, book.getYear());
+    }
+
+    @Test
+    @DisplayName("toString formate correctement - Couverture complète")
+    void testBook_ToString_FormatsCorrectly() {
+        // Arrange
+        Book book = new Book("978-1234567890", "Clean Code", "Robert Martin", 2008);
+        
+        // Act
+        String result = book.toString();
+        
+        // Assert
+        assertEquals("[978-1234567890] Clean Code - Robert Martin (2008)", result);
+    }
+
+    @Test
+    @DisplayName("toString avec valeurs vides - Cas limite")
+    void testBook_ToString_WithEmptyValues() {
+        // Arrange
+        Book book = new Book("", "", "", 0);
+        
+        // Act
+        String result = book.toString();
+        
+        // Assert
+        assertEquals("[]  -  (0)", result);
+    }
+
+    @Test
+    @DisplayName("Getters retournent les bonnes valeurs - Couverture")
+    void testBook_Getters_ReturnCorrectValues() {
+        // Arrange
+        Book book = new Book("123", "Title", "Author", 2020);
+        
+        // Assert - Tous les getters
+        assertEquals("123", book.getIsbn());
+        assertEquals("Title", book.getTitle());
+        assertEquals("Author", book.getAuthor());
+        assertEquals(2020, book.getYear());
+    }
+}
+
+
+
+=== FILE: src/test/java/legacy/BorrowerTest.java ===
+package legacy;
+
+import library.Borrower;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@DisplayName("Tests de non-régression - Borrower")
+class BorrowerTest {
+
+    @Test
+    @DisplayName("Création d'un emprunteur avec nom valide - Cas nominal")
+    void testBorrower_ValidName_Success() {
+        // Arrange & Act
+        Borrower borrower = new Borrower("Le R");
+        
+        // Assert
+        assertEquals("Le R", borrower.getName());
+    }
+
+    @Test
+    @DisplayName("Création d'un emprunteur avec nom vide - Point critique")
+    void testBorrower_EmptyName_Allowed() {
+        // Arrange & Act
+        Borrower borrower = new Borrower("");
+        
+        // Assert
+        assertEquals("", borrower.getName(), "Le système permet les noms vides");
+    }
+
+    @Test
+    @DisplayName("Attribut name est public - Dette technique")
+    void testBorrower_NameIsPublic_CanBeModified() {
+        // Arrange
+        Borrower borrower = new Borrower("Le R");
+        
+        // Act - Le champ n'est plus public, on peut le modifier avec méthode
+        borrower.setName("Le L");
+        
+        // Assert
+        assertEquals("Le L", borrower.getName(), "L'attribut name est modifiable car public");
+    }
+
+    @Test
+    @DisplayName("Création d'un emprunteur avec nom null - Cas limite")
+    void testBorrower_NullName_Allowed() {
+        // Arrange & Act
+        Borrower borrower = new Borrower(null);
+        
+        // Assert
+        assertNull(borrower.getName(), "Le système permet les noms null");
+    }
+
+    @Test
+    @DisplayName("Création d'un emprunteur avec caractères spéciaux - Validation")
+    void testBorrower_SpecialCharactersInName_Allowed() {
+        // Arrange & Act
+        Borrower borrower = new Borrower("Le J");
+        
+        // Assert
+        assertEquals("Le J", borrower.getName());
+    }
+
+    @Test
+    @DisplayName("Création d'un emprunteur avec nom très long - Cas limite")
+    void testBorrower_LongName_Allowed() {
+        // Arrange
+        String longName = "A".repeat(1000);
+        
+        // Act
+        Borrower borrower = new Borrower(longName);
+        
+        // Assert
+        assertEquals(longName, borrower.getName());
+        assertEquals(1000, borrower.getName().length());
+    }
+}
+
+
+
+=== FILE: réponses.md ===
+==============================================
+Analyse des responsabilités de chaque classe :
+==============================================
+
+Book :
+Classe contenant toutes les informations relatives à un livre, nous avons de stocké
+son isbn, son titre, l'auteur sous forme de string et enfin l'année.
+Nous avons donc ici des champs simple sans couplage avec d'autres classes.
+La classe livre peut donc exister indépendamment des autres.
+Elle contient un constructeur simple avec des getteurs et un toString.
+
+Borrower :
+Cette classe contient uniquement le nom de l'emprunteur. Nous pouvons créer un objet Borrower
+mais pas le lire ni le modifier via une méthode car cette classe expose publiquement son attribut
+name sans getter/setter, ce qui permet sa modification directe. Cette classe a donc pour simple
+responsabilité de stocker le nom d'un emprunteur.
+
+Library :
+Cette classe, comme son nom l'indique est censé représenter une librairie. Elle contient donc
+une liste de livre et un dictionnaire avec comme clé le isbn du livre et en valeur un emprunteur.
+On remarque que les attributs sont statiques et publiques.
+Nous pouvons rechercher un livre à condition d'avoir son isbn et savoir si un livre est emprunté,
+sans pour autant de méthode dédiée à l'emprunt.
+La classe a donc pour responsabilité de stocker les livres d'une librairie, et à savoir si un livre est emprunté
+ou non.
+
+LibraryApp :
+LibraryApp est une classe exécutable. Sa responsabilité première est celle d'exécuter l'interface de l'application 
+(interaction homme-machine). Mais on voit que cette responsabilité principale devient floue car elle mêle la logique
+métier censé être attribué à la librairie (par exemple ajouter un livre) avec sa responsabilité principale.
+
+=============================
+Analyse diagramme de classe :
+=============================
+
+On commence par analyser le couplage dans LibrabryApp.
+Cette classe est fortement couplée à Library, Book et Borrower car comme on peut le voir sur le diagramme avec 
+les flèches en pointillés «use», elle utilise directement leurs attributs et méthodes.
+Et évidemment l'application fonctionne, mais elle rend l'application difficile à modifier/maintenir car tout
+changement dans Library, Book ou Borrower risque d’impacter le code de LibraryApp.
+Donc on a ici un couplage très problématique.
+
+Pour les dépendances, LibraryApp dépend de toutes les autres classes pour fonctionner. Il agit non seulement en 
+tant que point d'entrée (interface) et centralise beaucoup la logique métier des autres classes.
+Library dépend de Book et Borrower via les collections books: List<Book> et dictionnaire loans: Map<String, Borrower>, ce qui fait que toutes les données de
+l'application se trouve dans cette classe.
+Un point aussi qui est positif c'est que les dépendances ne vont que dans un sens Book et Borrower ne connaissent pas Library, 
+ça évite les boucles de dépendances.
+
+Pour le principe d’encapsulation, Book le respecte bien car les attributs sont privés et accessibles uniquement via des getters.
+En revanche dans Library, les attributs books et loans sont publics et statiques ce qui signifie que n’importe quelle classe peut 
+les modifier directement, ce qui brise l’encapsulation et crée un risque d’incohérence des données (si tout le monde le modifie).
+Et dans Borrower, l’attribut name est public. Pour respecter l'encapsulation il faudrait faire comme pour Book et mettre l'attribut
+privé avec un getter pour respecter l’encapsulation.
+
+==============================
+Dette technique dans le code :
+==============================    
+
+Comme nous les avons un peu énoncé précédemment, la dette technique se trouve dans plusieurs points déjà énoncé.
+Les attributs statiques dans Library (books, loans) laisse n'importe qui modifier directement les collections, ce 
+qui crée un risque d'incohérence.
+​
+Nous avons aussi évoqué l'attribut name qui est publique et ne respecte pas l'encapsulation. Ce qui rend le code
+sensible aux modifications.
+
+Et enfin, la logique métier dans LibrabryApp. Comme dit précedemment, il gère la logique métier de Library. Toute la 
+validation passe par l'interface au lieu d'être dans Library ce qui rend le code impossible à réutiliser et très compliqué
+à maintenir et même à faire évoluer.
+On peut aussi noter l'absence de gestion d'erreurs, surtout celle avec l'année du livre. Il n'y a pas de try-catch autour de
+l'opération (parsing d'année), juste un defaulting to 0.
+
+============================================================
+3 risques majeurs pour la maintenabilité + recommandations :
+============================================================
+
+-------------------------------------------------------------
+1. Les données de Library sont accessibles par tout le monde.
+-------------------------------------------------------------
+Le risque c'est que les attributs books et loans de la classe Library sont publics et statiques, ce qui permet à n'importe quelle partie
+du code de faire par exemple Library.books.clear() ou Library.loans.put() directement. Cela peut causer des pertes de données et des 
+bugs/incohérence difficiles à tracer.
+
+Ce qu'il faudrait revoir :
+
+    - Privatiser books et loans : private static List<Book> books
+    - Créer des méthodes d'accès contrôlées, donc un CRUD complet pour les deux classes selon les besoins.
+
+------------------------------------------------
+​2. Logique métier non centralisée (mal répartie)
+------------------------------------------------
+
+La logique métier (validation de doublons, parsing d'année, vérification des emprunts) est écrite directement dans LibraryApp au lieu d'être 
+dans Library. ça empêche la réutilisation du code, augmente le risque d'incohérences si d'autres points d'entrée sont ajoutés et rend donc les 
+modifications complexes car il faut chercher la logique partout et s'assurer de ne rien oublié.
+​
+
+Ce qu'il faudrait revoir/ajouter :
+
+    - Déplacer toute la logique métier dans Library : library.addBook(book) doit gérer la validation des doublons tout seul
+    - Créer des méthodes métier propres : borrowBook(isbn, borrowerName) qui encapsule toutes les vérifications
+    - LibraryApp doit uniquement gérer l'interface utilisateur (Scanner, System.out) et déléguer à Library
+    - Ajouter une gestion d'erreurs avec des exceptions personnalisées (possible en java) : BookAlreadyBorrowedException,
+    BookNotFoundException
+
+---------------------------------------
+3. Couplage fort et dépendances rigides
+---------------------------------------
+
+Comme on l'a vu, LibraryApp dépend directement de toutes les autres classes (Library, Book, Borrower) et manipule directement leurs structures. 
+Les flèches <<use>> sur le diagramme montrent ce couplage. Si on veut changer la façon dont les emprunts sont stockés (par exemple passer d'une 
+Map à une table en base de données), on devra modifier à la fois Library et LibraryApp car LibraryApp accède directement à Library.loans.containsKey(). 
+Cela rend chaque évolution risquée et coûteuse en temps.
+
+Ce qu'il faudrait revoir :
+
+    - Créer une interface LibraryService qui définit les opérations métier (addBook, borrowBook, returnBook, listBooks)
+    - Library implémente cette interface, LibraryApp ne connaît que l'interface
+
+​ainsi, LibraryApp n'accéde jamais directement aux collections de Library, seulement via les méthodes publiques
+Cela permet de changer l'implémentation de Library (vers une base de données par exemple) sans toucher à LibraryApp.
+​
+
+
+=== FILE: info.md ===
+Pour le coverage :
+- jacoco
+
+

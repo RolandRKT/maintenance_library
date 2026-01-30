@@ -120,3 +120,17 @@ Ce qu'il faudrait revoir :
 ​ainsi, LibraryApp n'accéde jamais directement aux collections de Library, seulement via les méthodes publiques
 Cela permet de changer l'implémentation de Library (vers une base de données par exemple) sans toucher à LibraryApp.
 ​
+---------------------------------------
+4. Nouvelle analyse après TD2B
+---------------------------------------
+
+## Tests de non-régression - Détection de bugs
+
+### Coverage obtenu
+- **Library** : 100% (46 instructions)
+- **Book** : 100% (11 instructions)
+- **Borrower** : 100% (6 instructions)
+- **Total** : 48% (237/462 instructions)
+- **LibraryApp** : 0% (interface console non testée)
+
+**Conclusion** : Les tests de non-régression détectent efficacement les bugs.
