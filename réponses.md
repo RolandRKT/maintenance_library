@@ -134,3 +134,21 @@ Cela permet de changer l'implémentation de Library (vers une base de données p
 - **LibraryApp** : 0% (interface console non testée)
 
 **Conclusion** : Les tests de non-régression détectent efficacement les bugs.
+
+---------------------------------------
+5. Refactoring effectué
+---------------------------------------
+
+### Problèmes identifiés
+- Méthode main() trop longue (87 lignes, complexité 15)
+- Code dupliqué (affichage statut [BORROWED])
+- Variables temporaires non parlante (n, ib, a)
+
+### Solutions appliquées
+- **Extract Method** : 7 méthodes privées créées
+- **Rename Variable** : Noms explicites
+- Complexité cyclomatique réduite à < 5 par méthode
+
+### Vérification
+- 100% tests passent après refactoring
+- Couverture maintenue à 100%

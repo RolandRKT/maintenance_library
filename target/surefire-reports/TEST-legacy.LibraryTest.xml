@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="legacy.LibraryTest" time="0.069" tests="35" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="legacy.LibraryTest" time="0.076" tests="35" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="21"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -12,7 +12,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="FR"/>
     <property name="sun.boot.library.path" value="/usr/lib/jvm/java-21-openjdk-amd64/lib"/>
-    <property name="sun.java.command" value="/home/iut45/Etudiants/o22203444/Documents/maintenance/R6.06_LIBRARY/target/surefire/surefirebooter-20260130100810183_3.jar /home/iut45/Etudiants/o22203444/Documents/maintenance/R6.06_LIBRARY/target/surefire 2026-01-30T10-08-10_043-jvmRun1 surefire-20260130100810183_1tmp surefire_0-20260130100810183_2tmp"/>
+    <property name="sun.java.command" value="/home/iut45/Etudiants/o22203444/Documents/maintenance/R6.06_LIBRARY/target/surefire/surefirebooter-20260130101912410_3.jar /home/iut45/Etudiants/o22203444/Documents/maintenance/R6.06_LIBRARY/target/surefire 2026-01-30T10-19-12_313-jvmRun1 surefire-20260130101912410_1tmp surefire_0-20260130101912410_2tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/home/iut45/Etudiants/o22203444/Documents/maintenance/R6.06_LIBRARY/target/test-classes:/home/iut45/Etudiants/o22203444/Documents/maintenance/R6.06_LIBRARY/target/classes:/home/iut45/Etudiants/o22203444/.m2/repository/org/junit/jupiter/junit-jupiter/5.10.2/junit-jupiter-5.10.2.jar:/home/iut45/Etudiants/o22203444/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.10.2/junit-jupiter-api-5.10.2.jar:/home/iut45/Etudiants/o22203444/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/home/iut45/Etudiants/o22203444/.m2/repository/org/junit/platform/junit-platform-commons/1.10.2/junit-platform-commons-1.10.2.jar:/home/iut45/Etudiants/o22203444/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/home/iut45/Etudiants/o22203444/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.10.2/junit-jupiter-params-5.10.2.jar:/home/iut45/Etudiants/o22203444/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.10.2/junit-jupiter-engine-5.10.2.jar:/home/iut45/Etudiants/o22203444/.m2/repository/org/junit/platform/junit-platform-engine/1.10.2/junit-platform-engine-1.10.2.jar:/home/iut45/Etudiants/o22203444/.m2/repository/org/mockito/mockito-core/5.12.0/mockito-core-5.12.0.jar:/home/iut45/Etudiants/o22203444/.m2/repository/net/bytebuddy/byte-buddy/1.14.15/byte-buddy-1.14.15.jar:/home/iut45/Etudiants/o22203444/.m2/repository/net/bytebuddy/byte-buddy-agent/1.14.15/byte-buddy-agent-1.14.15.jar:/home/iut45/Etudiants/o22203444/.m2/repository/org/objenesis/objenesis/3.3/objenesis-3.3.jar:"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -27,7 +27,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
-    <property name="surefire.real.class.path" value="/home/iut45/Etudiants/o22203444/Documents/maintenance/R6.06_LIBRARY/target/surefire/surefirebooter-20260130100810183_3.jar"/>
+    <property name="surefire.real.class.path" value="/home/iut45/Etudiants/o22203444/Documents/maintenance/R6.06_LIBRARY/target/surefire/surefirebooter-20260130101912410_3.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="21.0.9+10-Ubuntu-124.04"/>
     <property name="user.name" value="o22203444"/>
@@ -53,39 +53,39 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="65.0"/>
   </properties>
-  <testcase name="testIsBorrowed_NullIsbn_ReturnsFalse" classname="legacy.LibraryTest" time="0.019"/>
-  <testcase name="testFindByAuthor_SpecialCharacters_ExactMatch" classname="legacy.LibraryTest" time="0.003"/>
-  <testcase name="testReturnBook_BorrowedBook_Success" classname="legacy.LibraryTest" time="0.004"/>
+  <testcase name="testIsBorrowed_NullIsbn_ReturnsFalse" classname="legacy.LibraryTest" time="0.02"/>
+  <testcase name="testFindByAuthor_SpecialCharacters_ExactMatch" classname="legacy.LibraryTest" time="0.004"/>
+  <testcase name="testReturnBook_BorrowedBook_Success" classname="legacy.LibraryTest" time="0.003"/>
   <testcase name="testHasBookWithTitle_NonExistingTitle_ReturnsFalse" classname="legacy.LibraryTest" time="0.001"/>
-  <testcase name="testFindByAuthor_PartialMatch_Works" classname="legacy.LibraryTest" time="0.0"/>
-  <testcase name="testBorrowBook_EmptyBorrowerName_Allowed" classname="legacy.LibraryTest" time="0.0"/>
+  <testcase name="testFindByAuthor_PartialMatch_Works" classname="legacy.LibraryTest" time="0.001"/>
+  <testcase name="testBorrowBook_EmptyBorrowerName_Allowed" classname="legacy.LibraryTest" time="0.001"/>
   <testcase name="testFindByIsbn_EmptyLibrary_ReturnsNull" classname="legacy.LibraryTest" time="0.001"/>
   <testcase name="testBorrowBook_AlreadyBorrowed_ReturnsFalse" classname="legacy.LibraryTest" time="0.001"/>
   <testcase name="testFindByAuthor_CaseSensitive_Behavior" classname="legacy.LibraryTest" time="0.0"/>
   <testcase name="testFindByIsbn_DuplicateIsbn_ReturnsFirstMatch" classname="legacy.LibraryTest" time="0.0"/>
-  <testcase name="testHasBookWithIsbn_NonExistingIsbn_ReturnsFalse" classname="legacy.LibraryTest" time="0.001"/>
+  <testcase name="testHasBookWithIsbn_NonExistingIsbn_ReturnsFalse" classname="legacy.LibraryTest" time="0.0"/>
   <testcase name="testAddBook_DuplicateIsbn_AllowsDuplicate" classname="legacy.LibraryTest" time="0.001"/>
-  <testcase name="testBorrowBook_NonExistingBook_ReturnsFalse" classname="legacy.LibraryTest" time="0.0"/>
-  <testcase name="testLibrary_Constructor_CanBeInstantiated" classname="legacy.LibraryTest" time="0.0"/>
+  <testcase name="testBorrowBook_NonExistingBook_ReturnsFalse" classname="legacy.LibraryTest" time="0.001"/>
+  <testcase name="testLibrary_Constructor_CanBeInstantiated" classname="legacy.LibraryTest" time="0.001"/>
   <testcase name="testBorrowBook_MultipleBorrowers_Success" classname="legacy.LibraryTest" time="0.001"/>
   <testcase name="testGetLoans_ReturnsDefensiveCopy" classname="legacy.LibraryTest" time="0.001"/>
   <testcase name="testAddBook_ValidBook_Success" classname="legacy.LibraryTest" time="0.001"/>
-  <testcase name="testHasBookWithTitle_ExistingTitle_ReturnsTrue" classname="legacy.LibraryTest" time="0.0"/>
-  <testcase name="testBorrowBook_EmptyIsbn_Allowed" classname="legacy.LibraryTest" time="0.001"/>
+  <testcase name="testHasBookWithTitle_ExistingTitle_ReturnsTrue" classname="legacy.LibraryTest" time="0.001"/>
+  <testcase name="testBorrowBook_EmptyIsbn_Allowed" classname="legacy.LibraryTest" time="0.0"/>
   <testcase name="testFindByIsbn_EmptyIsbn_CanFindBook" classname="legacy.LibraryTest" time="0.0"/>
-  <testcase name="testFindByIsbn_NonExistingBook_ReturnsNull" classname="legacy.LibraryTest" time="0.0"/>
-  <testcase name="testIsBorrowed_EmptyLoans_ReturnsFalse" classname="legacy.LibraryTest" time="0.001"/>
-  <testcase name="testHasBookWithIsbn_ExistingIsbn_ReturnsTrue" classname="legacy.LibraryTest" time="0.001"/>
-  <testcase name="testAddBook_MultipleBooks_Success" classname="legacy.LibraryTest" time="0.0"/>
+  <testcase name="testFindByIsbn_NonExistingBook_ReturnsNull" classname="legacy.LibraryTest" time="0.001"/>
+  <testcase name="testIsBorrowed_EmptyLoans_ReturnsFalse" classname="legacy.LibraryTest" time="0.0"/>
+  <testcase name="testHasBookWithIsbn_ExistingIsbn_ReturnsTrue" classname="legacy.LibraryTest" time="0.0"/>
+  <testcase name="testAddBook_MultipleBooks_Success" classname="legacy.LibraryTest" time="0.001"/>
   <testcase name="testBorrowReturnBorrowCycle_Success" classname="legacy.LibraryTest" time="0.0"/>
-  <testcase name="testFindByIsbn_NullIsbn_ReturnsNull" classname="legacy.LibraryTest" time="0.001"/>
-  <testcase name="testFindByAuthor_NullAuthor_ReturnsEmpty" classname="legacy.LibraryTest" time="0.0"/>
+  <testcase name="testFindByIsbn_NullIsbn_ReturnsNull" classname="legacy.LibraryTest" time="0.0"/>
+  <testcase name="testFindByAuthor_NullAuthor_ReturnsEmpty" classname="legacy.LibraryTest" time="0.001"/>
   <testcase name="testAddBook_DuplicateTitle_AllowsDuplicate" classname="legacy.LibraryTest" time="0.0"/>
-  <testcase name="testFindByIsbn_ExistingBook_ReturnsBook" classname="legacy.LibraryTest" time="0.0"/>
+  <testcase name="testFindByIsbn_ExistingBook_ReturnsBook" classname="legacy.LibraryTest" time="0.001"/>
   <testcase name="testAddBook_NullBook_ThrowsException" classname="legacy.LibraryTest" time="0.001"/>
   <testcase name="testHasBookWithTitle_NullTitle_ReturnsFalse" classname="legacy.LibraryTest" time="0.0"/>
   <testcase name="testBorrowBook_AvailableBook_Success" classname="legacy.LibraryTest" time="0.001"/>
   <testcase name="testLibrary_AttributesArePrivate_UseGetters" classname="legacy.LibraryTest" time="0.0"/>
-  <testcase name="testReturnBook_NotBorrowed_ReturnsNull" classname="legacy.LibraryTest" time="0.001"/>
+  <testcase name="testReturnBook_NotBorrowed_ReturnsNull" classname="legacy.LibraryTest" time="0.0"/>
   <testcase name="testFindByAuthor_EmptyString_ReturnsEmpty" classname="legacy.LibraryTest" time="0.0"/>
 </testsuite>

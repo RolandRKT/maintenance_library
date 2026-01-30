@@ -12,7 +12,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="FR"/>
     <property name="sun.boot.library.path" value="/usr/lib/jvm/java-21-openjdk-amd64/lib"/>
-    <property name="sun.java.command" value="/home/iut45/Etudiants/o22203444/Documents/maintenance/R6.06_LIBRARY/target/surefire/surefirebooter-20260130100810183_3.jar /home/iut45/Etudiants/o22203444/Documents/maintenance/R6.06_LIBRARY/target/surefire 2026-01-30T10-08-10_043-jvmRun1 surefire-20260130100810183_1tmp surefire_0-20260130100810183_2tmp"/>
+    <property name="sun.java.command" value="/home/iut45/Etudiants/o22203444/Documents/maintenance/R6.06_LIBRARY/target/surefire/surefirebooter-20260130101912410_3.jar /home/iut45/Etudiants/o22203444/Documents/maintenance/R6.06_LIBRARY/target/surefire 2026-01-30T10-19-12_313-jvmRun1 surefire-20260130101912410_1tmp surefire_0-20260130101912410_2tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/home/iut45/Etudiants/o22203444/Documents/maintenance/R6.06_LIBRARY/target/test-classes:/home/iut45/Etudiants/o22203444/Documents/maintenance/R6.06_LIBRARY/target/classes:/home/iut45/Etudiants/o22203444/.m2/repository/org/junit/jupiter/junit-jupiter/5.10.2/junit-jupiter-5.10.2.jar:/home/iut45/Etudiants/o22203444/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.10.2/junit-jupiter-api-5.10.2.jar:/home/iut45/Etudiants/o22203444/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/home/iut45/Etudiants/o22203444/.m2/repository/org/junit/platform/junit-platform-commons/1.10.2/junit-platform-commons-1.10.2.jar:/home/iut45/Etudiants/o22203444/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/home/iut45/Etudiants/o22203444/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.10.2/junit-jupiter-params-5.10.2.jar:/home/iut45/Etudiants/o22203444/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.10.2/junit-jupiter-engine-5.10.2.jar:/home/iut45/Etudiants/o22203444/.m2/repository/org/junit/platform/junit-platform-engine/1.10.2/junit-platform-engine-1.10.2.jar:/home/iut45/Etudiants/o22203444/.m2/repository/org/mockito/mockito-core/5.12.0/mockito-core-5.12.0.jar:/home/iut45/Etudiants/o22203444/.m2/repository/net/bytebuddy/byte-buddy/1.14.15/byte-buddy-1.14.15.jar:/home/iut45/Etudiants/o22203444/.m2/repository/net/bytebuddy/byte-buddy-agent/1.14.15/byte-buddy-agent-1.14.15.jar:/home/iut45/Etudiants/o22203444/.m2/repository/org/objenesis/objenesis/3.3/objenesis-3.3.jar:"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -27,7 +27,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
-    <property name="surefire.real.class.path" value="/home/iut45/Etudiants/o22203444/Documents/maintenance/R6.06_LIBRARY/target/surefire/surefirebooter-20260130100810183_3.jar"/>
+    <property name="surefire.real.class.path" value="/home/iut45/Etudiants/o22203444/Documents/maintenance/R6.06_LIBRARY/target/surefire/surefirebooter-20260130101912410_3.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="21.0.9+10-Ubuntu-124.04"/>
     <property name="user.name" value="o22203444"/>
@@ -54,9 +54,9 @@
     <property name="java.class.version" value="65.0"/>
   </properties>
   <testcase name="testBorrower_NameIsPublic_CanBeModified" classname="legacy.BorrowerTest" time="0.001"/>
-  <testcase name="testBorrower_ValidName_Success" classname="legacy.BorrowerTest" time="0.0"/>
+  <testcase name="testBorrower_ValidName_Success" classname="legacy.BorrowerTest" time="0.001"/>
   <testcase name="testBorrower_NullName_Allowed" classname="legacy.BorrowerTest" time="0.0"/>
   <testcase name="testBorrower_EmptyName_Allowed" classname="legacy.BorrowerTest" time="0.0"/>
-  <testcase name="testBorrower_LongName_Allowed" classname="legacy.BorrowerTest" time="0.001"/>
-  <testcase name="testBorrower_SpecialCharactersInName_Allowed" classname="legacy.BorrowerTest" time="0.0"/>
+  <testcase name="testBorrower_LongName_Allowed" classname="legacy.BorrowerTest" time="0.0"/>
+  <testcase name="testBorrower_SpecialCharactersInName_Allowed" classname="legacy.BorrowerTest" time="0.001"/>
 </testsuite>
