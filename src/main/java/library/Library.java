@@ -7,7 +7,7 @@ public class Library {
     private static Map<String, Borrower> loans = new HashMap<>();
 
     // ═══════════════════════════════════════════════════════════
-    // MÉTHODES D'ACCÈS AUX COLLECTIONS (Getters)
+    // Les Getters
     // ═══════════════════════════════════════════════════════════
     
     public static List<Book> getBooks() {
@@ -19,13 +19,12 @@ public class Library {
     }
     
     // ═══════════════════════════════════════════════════════════
-    // MÉTHODES MÉTIER - GESTION DES LIVRES
+    // Les méthodes métiers
     // ═══════════════════════════════════════════════════════════
     
     /**
      * Ajoute un livre à la bibliothèque.
-     * Note : Pour compatibilité avec les tests existants, 
-     * cette version N'empêche PAS les doublons (comportement actuel).
+     * cette version n'empêche pas les doublons.
      */
     public static void addBook(Book book) {
         if (book == null) {
